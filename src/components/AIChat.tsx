@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Loader2, Bot, User, X, Globe, ExternalLink, AlertTriangle } from 'lucide-react';
 import { ChatMessage } from '../types';
-import { sendMessageToGemini, fileToBase64 } from '../services/geminiService';
+import { sendMessageToGemini, fileToBase64 } from '../services_temp/geminiService';
 import { useLanguage } from '../contexts_temp/LanguageContext';
 
 export const AIChat: React.FC = () => {
@@ -121,7 +121,7 @@ export const AIChat: React.FC = () => {
           >
             <div
               className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-indigo-600' :
-                  msg.text.includes("Error") ? 'bg-red-500' : 'bg-emerald-600'
+                msg.text.includes("Error") ? 'bg-red-500' : 'bg-emerald-600'
                 }`}
             >
               {msg.role === 'user' ? <User size={16} className="text-white" /> : (
@@ -131,10 +131,10 @@ export const AIChat: React.FC = () => {
 
             <div
               className={`max-w-[85%] rounded-2xl p-4 ${msg.role === 'user'
-                  ? 'bg-indigo-100 dark:bg-indigo-600/20 text-indigo-900 dark:text-indigo-100 rounded-tr-sm'
-                  : msg.text.includes("Error")
-                    ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
-                    : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-sm'
+                ? 'bg-indigo-100 dark:bg-indigo-600/20 text-indigo-900 dark:text-indigo-100 rounded-tr-sm'
+                : msg.text.includes("Error")
+                  ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
+                  : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-sm'
                 }`}
             >
               {msg.imageUrl && (
