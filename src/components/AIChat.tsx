@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Loader2, Bot, User, X, Globe, ExternalLink, AlertTriangle } from 'lucide-react';
 import { ChatMessage } from '../types';
 import { sendMessageToGemini, fileToBase64 } from '../services/geminiService';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts_temp/LanguageContext';
 
 export const AIChat: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -55,7 +55,7 @@ export const AIChat: React.FC = () => {
 
     try {
       let imageBase64: string | undefined;
-      
+
       if (selectedImage) {
         imageBase64 = await fileToBase64(selectedImage);
       }
@@ -77,10 +77,10 @@ export const AIChat: React.FC = () => {
     } catch (error: any) {
       console.error("Chat error:", error);
       let errorMessage = t('error_ai');
-      
+
       // Provide more specific error if it's a configuration issue
       if (error.message && (error.message.includes("API Key") || error.message.includes("API_KEY"))) {
-          errorMessage = "Configuration Error: API Key is missing or invalid. Please check your settings.";
+        errorMessage = "Configuration Error: API Key is missing or invalid. Please check your settings.";
       }
 
       const errorMsg: ChatMessage = {
@@ -113,36 +113,34 @@ export const AIChat: React.FC = () => {
             <p className="text-sm">{t('ai_intro')}</p>
           </div>
         )}
-        
+
         {messages.map((msg) => (
-          <div 
-            key={msg.id} 
+          <div
+            key={msg.id}
             className={`flex items-start gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
           >
-            <div 
-              className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                msg.role === 'user' ? 'bg-indigo-600' : 
-                msg.text.includes("Error") ? 'bg-red-500' : 'bg-emerald-600'
-              }`}
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-indigo-600' :
+                  msg.text.includes("Error") ? 'bg-red-500' : 'bg-emerald-600'
+                }`}
             >
               {msg.role === 'user' ? <User size={16} className="text-white" /> : (
-                  msg.text.includes("Error") ? <AlertTriangle size={16} className="text-white" /> : <Bot size={16} className="text-white" />
+                msg.text.includes("Error") ? <AlertTriangle size={16} className="text-white" /> : <Bot size={16} className="text-white" />
               )}
             </div>
-            
-            <div 
-              className={`max-w-[85%] rounded-2xl p-4 ${
-                msg.role === 'user' 
-                  ? 'bg-indigo-100 dark:bg-indigo-600/20 text-indigo-900 dark:text-indigo-100 rounded-tr-sm' 
-                  : msg.text.includes("Error") 
+
+            <div
+              className={`max-w-[85%] rounded-2xl p-4 ${msg.role === 'user'
+                  ? 'bg-indigo-100 dark:bg-indigo-600/20 text-indigo-900 dark:text-indigo-100 rounded-tr-sm'
+                  : msg.text.includes("Error")
                     ? 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800'
                     : 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-tl-sm shadow-sm'
-              }`}
+                }`}
             >
               {msg.imageUrl && (
-                <img 
-                  src={msg.imageUrl} 
-                  alt="User upload" 
+                <img
+                  src={msg.imageUrl}
+                  alt="User upload"
                   className="max-w-full rounded-lg mb-3 border border-slate-200 dark:border-white/10"
                 />
               )}
@@ -160,7 +158,7 @@ export const AIChat: React.FC = () => {
                     {msg.groundingMetadata.groundingChunks.map((chunk: any, index: number) => {
                       if (chunk.web) {
                         return (
-                          <a 
+                          <a
                             key={index}
                             href={chunk.web.uri}
                             target="_blank"
@@ -181,15 +179,15 @@ export const AIChat: React.FC = () => {
             </div>
           </div>
         ))}
-        
+
         {isLoading && (
           <div className="flex items-start gap-3">
-             <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
-               <Bot size={16} className="text-white" />
-             </div>
-             <div className="bg-white dark:bg-slate-800 rounded-2xl rounded-tl-sm p-4 text-slate-500 dark:text-slate-400 shadow-sm">
-               <Loader2 className="animate-spin" size={20} />
-             </div>
+            <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center flex-shrink-0">
+              <Bot size={16} className="text-white" />
+            </div>
+            <div className="bg-white dark:bg-slate-800 rounded-2xl rounded-tl-sm p-4 text-slate-500 dark:text-slate-400 shadow-sm">
+              <Loader2 className="animate-spin" size={20} />
+            </div>
           </div>
         )}
         <div ref={messagesEndRef} />
@@ -197,12 +195,12 @@ export const AIChat: React.FC = () => {
 
       {/* Input Area */}
       <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 transition-colors">
-        
+
         {/* Image Preview Overlay */}
         {imagePreview && (
           <div className="mb-2 relative inline-block">
             <img src={imagePreview} alt="Preview" className="h-20 w-20 object-cover rounded-lg border border-slate-300 dark:border-slate-600" />
-            <button 
+            <button
               onClick={clearImage}
               className="absolute -top-2 -right-2 bg-slate-200 dark:bg-slate-700 rounded-full p-1 hover:bg-red-500 transition-colors text-slate-600 dark:text-white border border-slate-300 dark:border-slate-500 hover:text-white"
             >
@@ -212,15 +210,15 @@ export const AIChat: React.FC = () => {
         )}
 
         <div className="flex items-end gap-2">
-          <button 
+          <button
             onClick={() => fileInputRef.current?.click()}
             className="p-3 text-slate-500 dark:text-slate-400 hover:text-indigo-500 dark:hover:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-full transition-colors"
             title="Upload Image"
           >
             <ImageIcon size={20} />
           </button>
-          <input 
-            type="file" 
+          <input
+            type="file"
             ref={fileInputRef}
             onChange={handleImageSelect}
             accept="image/*"
@@ -235,8 +233,8 @@ export const AIChat: React.FC = () => {
             className="flex-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl py-3 px-4 focus:outline-none focus:border-indigo-500 text-slate-800 dark:text-slate-200 resize-none h-12 max-h-32 scrollbar-hide"
             rows={1}
           />
-          
-          <button 
+
+          <button
             onClick={handleSend}
             disabled={isLoading || (!input.trim() && !selectedImage)}
             className="p-3 bg-indigo-600 text-white rounded-full hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"

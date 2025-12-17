@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Folder, Briefcase, Home, Code, Book, Rocket, Star, Zap, Globe, Cpu } from 'lucide-react';
 import { Project } from '../types';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts_temp/LanguageContext';
 
 interface ProjectModalProps {
   project?: Project | null;
@@ -67,7 +67,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="w-full max-w-md bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-in zoom-in-95 duration-200">
-        
+
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
           <h2 className="text-lg font-bold text-slate-800 dark:text-white">
@@ -117,11 +117,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
                   key={name}
                   type="button"
                   onClick={() => setIcon(name)}
-                  className={`flex items-center justify-center p-3 rounded-xl border-2 transition-all ${
-                    icon === name 
-                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400' 
+                  className={`flex items-center justify-center p-3 rounded-xl border-2 transition-all ${icon === name
+                      ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400'
                       : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 text-slate-500 hover:border-slate-300 dark:hover:border-slate-600'
-                  }`}
+                    }`}
                 >
                   <IconComponent size={20} />
                 </button>
@@ -135,9 +134,9 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, isOpen, onC
               <button
                 type="button"
                 onClick={() => {
-                   if (window.confirm('Are you sure you want to delete this project?')) {
-                     onDelete(project.id);
-                   }
+                  if (window.confirm('Are you sure you want to delete this project?')) {
+                    onDelete(project.id);
+                  }
                 }}
                 className="px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl font-semibold transition-colors"
               >

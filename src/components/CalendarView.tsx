@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Task } from '../types';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts_temp/LanguageContext';
 
 interface CalendarViewProps {
   tasks: Task[];
@@ -48,7 +48,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, selectedDate,
     const days = [];
     const totalDays = daysInMonth(currentMonth);
     const startDay = firstDayOfMonth(currentMonth);
-    
+
     // Empty slots for days before the 1st
     for (let i = 0; i < startDay; i++) {
       days.push(<div key={`empty-${i}`} className={compact ? "h-8" : "h-10 sm:h-14"}></div>);
@@ -70,15 +70,15 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, selectedDate,
           className={`
             relative w-full flex flex-col items-center justify-center rounded-lg transition-all
             ${compact ? 'h-8 text-xs' : 'h-10 sm:h-14'}
-            ${isSelected 
-              ? 'bg-indigo-600 text-white shadow-md transform scale-105 z-10' 
+            ${isSelected
+              ? 'bg-indigo-600 text-white shadow-md transform scale-105 z-10'
               : 'hover:bg-slate-100 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300'
             }
             ${isToday && !isSelected ? 'border border-indigo-500 text-indigo-500 font-semibold' : ''}
           `}
         >
           <span className={compact ? "text-xs" : "text-sm"}>{day}</span>
-          
+
           {/* Task Indicator Dots */}
           {!compact && (
             <div className="flex gap-0.5 mt-1 h-1.5">
@@ -101,7 +101,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({ tasks, selectedDate,
 
   return (
     <div className={`${compact ? '' : 'bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm p-4 mb-6'} transition-colors`}>
-      
+
       {/* Header */}
       <div className={`flex items-center justify-between ${compact ? 'mb-2' : 'mb-4'}`}>
         <h2 className={`${compact ? 'text-sm' : 'text-lg'} font-bold text-slate-800 dark:text-slate-100 capitalize`}>

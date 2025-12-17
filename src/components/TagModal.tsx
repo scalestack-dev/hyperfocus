@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Tag as TagIcon, Trash2 } from 'lucide-react';
 import { Tag } from '../types';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts_temp/LanguageContext';
 
 interface TagModalProps {
   tag?: Tag | null;
@@ -13,7 +13,7 @@ interface TagModalProps {
 }
 
 const PRESET_COLORS = [
-  '#ef4444', '#f97316', '#f59e0b', '#10b981', '#06b6d4', 
+  '#ef4444', '#f97316', '#f59e0b', '#10b981', '#06b6d4',
   '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#ec4899', '#64748b'
 ];
 
@@ -48,7 +48,7 @@ export const TagModal: React.FC<TagModalProps> = ({ tag, isOpen, onClose, onSave
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
       <div className="w-full max-w-sm bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden animate-in zoom-in-95 duration-200">
-        
+
         <div className="flex items-center justify-between p-4 border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50">
           <h2 className="text-lg font-bold text-slate-800 dark:text-white flex items-center gap-2">
             <TagIcon size={18} />
@@ -75,13 +75,13 @@ export const TagModal: React.FC<TagModalProps> = ({ tag, isOpen, onClose, onSave
           <div>
             <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{t('project_color') || 'Color'}</label>
             <div className="flex items-center gap-3 mb-3">
-               <input 
-                  type="color" 
-                  value={color}
-                  onChange={(e) => setColor(e.target.value)}
-                  className="w-10 h-10 rounded cursor-pointer border-0 p-0"
-               />
-               <span className="text-sm font-mono text-slate-500">{color}</span>
+              <input
+                type="color"
+                value={color}
+                onChange={(e) => setColor(e.target.value)}
+                className="w-10 h-10 rounded cursor-pointer border-0 p-0"
+              />
+              <span className="text-sm font-mono text-slate-500">{color}</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {PRESET_COLORS.map((c) => (
@@ -101,9 +101,9 @@ export const TagModal: React.FC<TagModalProps> = ({ tag, isOpen, onClose, onSave
               <button
                 type="button"
                 onClick={() => {
-                   if (window.confirm('Delete this tag?')) {
-                     onDelete(tag.id);
-                   }
+                  if (window.confirm('Delete this tag?')) {
+                    onDelete(tag.id);
+                  }
                 }}
                 className="px-4 py-3 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl font-semibold transition-colors"
               >

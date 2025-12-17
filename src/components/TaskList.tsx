@@ -3,7 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Trash2, Play, Pause, Circle, CheckCircle, Calendar, Edit2, ListChecks, Inbox, Archive, Sun, Bell, Repeat, Folder, Search } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Task, ViewMode, Project } from '../types';
-import { useLanguage } from '../contexts/LanguageContext';
+import { useLanguage } from '../contexts_temp/LanguageContext';
 import { TaskCreator } from './TaskCreator';
 
 interface TaskListProps {
@@ -14,7 +14,7 @@ interface TaskListProps {
   onDelete: (id: string) => void;
   onPlay: (id: string | null) => void;
   onEdit: (id: string) => void;
-  onArchive?: (id: string) => void; 
+  onArchive?: (id: string) => void;
   onArchiveCompleted?: () => void;
   activeTaskId: string | null;
   viewMode: ViewMode;
@@ -84,7 +84,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
   const isOverdue = (deadline?: number) => {
     if (!deadline) return false;
     const startOfToday = new Date();
-    startOfToday.setHours(0,0,0,0);
+    startOfToday.setHours(0, 0, 0, 0);
     return deadline < startOfToday.getTime();
   };
 
@@ -101,10 +101,10 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
       case 'search':
         return { title: t('search_results'), subtitle: t('search_subtitle'), icon: <Search className="text-indigo-500" size={28} /> };
       case 'project':
-        return { 
-          title: currentProject?.title || t('projects'), 
-          subtitle: t('all_tasks_subtitle'), 
-          icon: <Folder className="text-indigo-500" size={28} style={{ color: currentProject?.color }} /> 
+        return {
+          title: currentProject?.title || t('projects'),
+          subtitle: t('all_tasks_subtitle'),
+          icon: <Folder className="text-indigo-500" size={28} style={{ color: currentProject?.color }} />
         };
       default:
         return { title: t('tasks'), subtitle: t('all_tasks_subtitle'), icon: <ListChecks className="text-slate-500" size={28} /> };
@@ -118,7 +118,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
     return [...tasks].sort((a, b) => {
       // Primary sort: Completion status (uncompleted first)
       if (a.isCompleted !== b.isCompleted) {
-          return a.isCompleted ? 1 : -1;
+        return a.isCompleted ? 1 : -1;
       }
       // Secondary sort: Creation date (newest first)
       return b.createdAt - a.createdAt;
@@ -132,31 +132,31 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
       {/* Header */}
       <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
         <div className="flex items-center gap-4">
-            <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl">
-                {header.icon}
-            </div>
-            <div>
-                <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{header.title}</h2>
-                <p className="text-slate-500 dark:text-slate-400 text-sm">{header.subtitle}</p>
-            </div>
+          <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl">
+            {header.icon}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{header.title}</h2>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">{header.subtitle}</p>
+          </div>
         </div>
 
         {/* Archive Completed Button */}
         {hasCompletedTasks && onArchiveCompleted && viewMode !== 'archives' && (
-            <button 
-                onClick={onArchiveCompleted}
-                className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-lg text-sm font-medium transition-colors"
-                title={t('archive_completed')}
-            >
-                <Archive size={16} />
-                <span className="hidden sm:inline">{t('archive_completed')}</span>
-            </button>
+          <button
+            onClick={onArchiveCompleted}
+            className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-emerald-100 dark:hover:bg-emerald-900/30 text-slate-600 dark:text-slate-300 hover:text-emerald-600 dark:hover:text-emerald-400 rounded-lg text-sm font-medium transition-colors"
+            title={t('archive_completed')}
+          >
+            <Archive size={16} />
+            <span className="hidden sm:inline">{t('archive_completed')}</span>
+          </button>
         )}
       </div>
 
       {viewMode !== 'archives' && viewMode !== 'search' && (
-        <TaskCreator 
-          onAdd={onAdd} 
+        <TaskCreator
+          onAdd={onAdd}
           projects={projects}
           defaultProject={currentProject}
           defaultDate={defaultDate}
@@ -168,15 +168,15 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
         {sortedTasks.length === 0 && (
           <div className="flex flex-col items-center justify-center py-16 text-slate-500 border-2 border-dashed border-slate-300 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-800/20">
             {viewMode === 'search' ? (
-                <>
-                   <Search size={48} className="mb-4 opacity-50" />
-                   <p>{t('no_search_results')}</p>
-                </>
+              <>
+                <Search size={48} className="mb-4 opacity-50" />
+                <p>{t('no_search_results')}</p>
+              </>
             ) : (
-                <>
-                    <ListChecks size={48} className="mb-4 opacity-50" />
-                    <p>{viewMode === 'archives' ? t('no_archived_tasks') : t('no_active_tasks')} {header.title}.</p>
-                </>
+              <>
+                <ListChecks size={48} className="mb-4 opacity-50" />
+                <p>{viewMode === 'archives' ? t('no_archived_tasks') : t('no_active_tasks')} {header.title}.</p>
+              </>
             )}
           </div>
         )}
@@ -186,35 +186,33 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
           const completedSubtasks = task.subTasks.filter(st => st.isCompleted).length;
           const totalSubtasks = task.subTasks.length;
           const progress = totalSubtasks > 0 ? (completedSubtasks / totalSubtasks) * 100 : 0;
-          
+
           const taskProject = projects.find(p => p.id === task.projectId);
 
           return (
-            <div 
-              key={task.id} 
-              className={`group relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 ${
-                isActive 
-                  ? 'bg-white dark:bg-slate-800/90 border-indigo-500 shadow-lg shadow-indigo-900/10 dark:shadow-indigo-900/20' 
+            <div
+              key={task.id}
+              className={`group relative flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 ${isActive
+                  ? 'bg-white dark:bg-slate-800/90 border-indigo-500 shadow-lg shadow-indigo-900/10 dark:shadow-indigo-900/20'
                   : 'bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-700/50 hover:bg-slate-50 dark:hover:bg-slate-800'
-              } ${task.isCompleted ? 'opacity-60 grayscale' : ''}`}
+                } ${task.isCompleted ? 'opacity-60 grayscale' : ''}`}
             >
               {/* Checkbox */}
-              <button 
+              <button
                 onClick={() => handleTaskToggle(task)}
-                className={`flex-shrink-0 transition-colors ${
-                  task.isCompleted ? 'text-indigo-500' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-400'
-                }`}
+                className={`flex-shrink-0 transition-colors ${task.isCompleted ? 'text-indigo-500' : 'text-slate-400 dark:text-slate-500 hover:text-indigo-400'
+                  }`}
               >
                 {task.isCompleted ? <CheckCircle size={24} /> : <Circle size={24} />}
               </button>
 
               {/* Task Content */}
-              <div 
+              <div
                 className="flex-1 min-w-0 cursor-pointer"
                 onClick={() => onEdit(task.id)}
               >
                 <div className="flex items-center gap-2 mb-1">
-                   <p className={`font-medium text-lg truncate ${task.isCompleted ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'}`}>
+                  <p className={`font-medium text-lg truncate ${task.isCompleted ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-800 dark:text-slate-200'}`}>
                     {task.title}
                   </p>
                   {task.priority === 'high' && !task.isCompleted && (
@@ -230,15 +228,15 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500">
                   {/* Time Spent */}
                   <span className="flex items-center gap-1 tabular-nums">
-                     {formatTime(task.timeSpent)}
-                     {isActive && <span className="text-emerald-500 dark:text-emerald-400 font-medium text-xs animate-pulse ml-1">● REC</span>}
+                    {formatTime(task.timeSpent)}
+                    {isActive && <span className="text-emerald-500 dark:text-emerald-400 font-medium text-xs animate-pulse ml-1">● REC</span>}
                   </span>
-                  
+
                   {/* Project Indicator (if not in project view) */}
                   {taskProject && viewMode !== 'project' && (
                     <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: `${taskProject.color}20`, color: taskProject.color }}>
-                       <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: taskProject.color }} />
-                       {taskProject.title}
+                      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: taskProject.color }} />
+                      {taskProject.title}
                     </span>
                   )}
 
@@ -272,34 +270,33 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
 
                 {/* Subtask Progress Bar */}
                 {totalSubtasks > 0 && (
-                   <div className="mt-3 flex items-center gap-2">
-                     <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
-                       <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${progress}%` }}></div>
-                     </div>
-                     <span className="text-xs text-slate-400">{completedSubtasks}/{totalSubtasks}</span>
-                   </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <div className="flex-1 h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div className="h-full bg-indigo-500 transition-all duration-300" style={{ width: `${progress}%` }}></div>
+                    </div>
+                    <span className="text-xs text-slate-400">{completedSubtasks}/{totalSubtasks}</span>
+                  </div>
                 )}
               </div>
 
               {/* Actions */}
               <div className="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                 {!task.isCompleted && (
-                  <button 
+                  <button
                     onClick={(e) => { e.stopPropagation(); onPlay(isActive ? null : task.id); }}
-                    className={`p-2 rounded-full transition-colors ${
-                      isActive 
-                        ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-500/30' 
+                    className={`p-2 rounded-full transition-colors ${isActive
+                        ? 'bg-amber-100 dark:bg-amber-500/20 text-amber-600 dark:text-amber-400 hover:bg-amber-200 dark:hover:bg-amber-500/30'
                         : 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-200 dark:hover:bg-indigo-500/30'
-                    }`}
+                      }`}
                     title={isActive ? t('pause_timer') : t('start_timer')}
                   >
                     {isActive ? <Pause size={18} /> : <Play size={18} />}
                   </button>
                 )}
-                
+
                 {/* Archive Button for Completed Tasks */}
                 {task.isCompleted && onArchive && (
-                  <button 
+                  <button
                     onClick={(e) => { e.stopPropagation(); onArchive(task.id); }}
                     className="p-2 rounded-full text-slate-400 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 hover:text-emerald-500 dark:hover:text-emerald-400 transition-colors"
                     title="Archive Task"
@@ -308,7 +305,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
                   </button>
                 )}
 
-                <button 
+                <button
                   onClick={(e) => { e.stopPropagation(); onEdit(task.id); }}
                   className="p-2 rounded-full text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
                   title={t('edit_details')}
@@ -316,7 +313,7 @@ export const TaskList: React.FC<TaskListProps> = ({ tasks, projects = [], onAdd,
                   <Edit2 size={18} />
                 </button>
 
-                <button 
+                <button
                   onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
                   className="p-2 rounded-full text-slate-400 hover:bg-red-100 dark:hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                   title={t('delete_task')}
