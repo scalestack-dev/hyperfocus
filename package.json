@@ -1,3 +1,4 @@
+
 {
   "name": "hyperfocus",
   "private": true,
@@ -9,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@google/genai": "latest",
+    "@google/genai": "0.2.1",
     "canvas-confetti": "^1.9.2",
     "lucide-react": "^0.344.0",
     "react": "^18.2.0",
