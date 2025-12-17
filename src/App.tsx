@@ -19,36 +19,57 @@ import { InAppNotification } from './components/InAppNotification';
 
 const App = () => {
   const { t } = useLanguage();
-
   // State Initialization
+  // State Initialization (Version Sécurisée)
   const [state, setState] = useState<AppState>(() => {
-    const saved = localStorage.getItem('hyperfocus-state');
-    return saved ? JSON.parse(saved) : {
-      tasks: [],
-      projects: [],
-      tags: [],
-      kanbanColumns: [
-        { id: 'todo', title: 'To Do', color: 'border-slate-400' },
-        { id: 'in-progress', title: 'In Progress', color: 'border-blue-500' },
-        { id: 'done', title: 'Done', color: 'border-emerald-500' }
-      ],
-      eisenhowerLists: [],
-      activeTaskId: null,
-      activeProjectId: null,
-      activeSessionStartTime: null,
-      lastTimerSync: null,
-      viewMode: 'inbox',
-      isSidebarOpen: true,
-      editingTaskId: null,
-      isProjectModalOpen: false,
-      editingProjectId: null,
-      theme: 'system',
-      notificationSound: 'default',
-      customSoundData: null,
-      inboxFilter: 'strict'
-    };
-  });
+    try {
+      const saved = localStorage.getItem('hyperfocus-state');
+      // Si saved existe, on parse, sinon objet vide
+      const parsed = saved ? JSON.parse(saved) : {};
 
+      // On fusionne avec les valeurs par défaut pour garantir qu'aucun tableau n'est undefined
+      return {
+        tasks: Array.isArray(parsed.tasks) ? parsed.tasks : [],
+        projects: Array.isArray(parsed.projects) ? parsed.projects : [],
+        tags: Array.isArray(parsed.tags) ? parsed.tags : [],
+        kanbanColumns: Array.isArray(parsed.kanbanColumns) ? parsed.kanbanColumns : [
+          { id: 'todo', title: 'To Do', color: 'border-slate-400' },
+          { id: 'in-progress', title: 'In Progress', color: 'border-blue-500' },
+          { id: 'done', title: 'Done', color: 'border-emerald-500' }
+        ],
+        eisenhowerLists: Array.isArray(parsed.eisenhowerLists) ? parsed.eisenhowerLists : [],
+        activeTaskId: parsed.activeTaskId || null,
+        activeProjectId: parsed.activeProjectId || null,
+        activeSessionStartTime: parsed.activeSessionStartTime || null,
+        lastTimerSync: parsed.lastTimerSync || null,
+        viewMode: parsed.viewMode || 'inbox',
+        isSidebarOpen: parsed.isSidebarOpen !== undefined ? parsed.isSidebarOpen : true,
+        editingTaskId: parsed.editingTaskId || null,
+        isProjectModalOpen: false, // Force false au démarrage
+        editingProjectId: null,
+        theme: parsed.theme || 'system',
+        notificationSound: parsed.notificationSound || 'default',
+        customSoundData: parsed.customSoundData || null,
+        inboxFilter: parsed.inboxFilter || 'strict'
+      };
+    } catch (e) {
+      // En cas de localStorage corrompu, on repart à zéro proprement
+      console.error("State corrupted, resetting...", e);
+      return {
+        tasks: [], projects: [], tags: [],
+        kanbanColumns: [
+          { id: 'todo', title: 'To Do', color: 'border-slate-400' },
+          { id: 'in-progress', title: 'In Progress', color: 'border-blue-500' },
+          { id: 'done', title: 'Done', color: 'border-emerald-500' }
+        ],
+        eisenhowerLists: [], activeTaskId: null, activeProjectId: null,
+        activeSessionStartTime: null, lastTimerSync: null, viewMode: 'inbox',
+        isSidebarOpen: true, editingTaskId: null, isProjectModalOpen: false,
+        editingProjectId: null, theme: 'system', notificationSound: 'default',
+        customSoundData: null, inboxFilter: 'strict'
+      };
+    }
+  });
   const [searchQuery, setSearchQuery] = useState('');
   const [activeAlert, setActiveAlert] = useState<{ title: string, body: string } | null>(null);
   const [calendarDate, setCalendarDate] = useState(new Date());
