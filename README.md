@@ -1,28 +1,20 @@
-# Hyperfocus
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+</div>
 
-Master your flow. A dedicated productivity tool for entrepreneurs, freelancers, and creators, combining Deep Work principles with the Pomodoro technique.
+# Run and deploy your AI Studio app
 
-## What is Hyperfocus?
+This contains everything you need to run your app locally.
 
-Hyperfocus helps you structure your day, protect your focus time, and execute on what actually moves the needle.  
-It is designed for ambitious solo founders and small teams who want less chaos and more consistent output.
+View your app in AI Studio: https://ai.studio/apps/drive/159-pipWi0rouzlRdu-GVDlYBG3d57_aL
 
-## Core features (planned)
+## Run Locally
 
-- Focus sessions inspired by Pomodoro and Deep Work.
-- Simple task management with priorities.
-- Daily view so you always know what to work on next.
-- Built-in routines to reduce decision fatigue.
-
-## Who is it for?
-
-- Solopreneurs and freelancers.
-- Content creators and knowledge workers.
-- Founders and small teams who want to protect their focus time.
-
-## Project status
-
-This project is under active development.  
-The initial version comes from Google AI Studio / Google Antigravity and will be iterated into a production-ready SaaS.
+**Prerequisites:**  Node.js
 
 
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
