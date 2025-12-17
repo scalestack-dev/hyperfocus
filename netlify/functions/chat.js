@@ -1,32 +1,68 @@
 // netlify/functions/chat.js
-// On charge l'outil pour parler à Google
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 exports.handler = async function (event) {
+    // Sécurité : On accepte uniquement les messages POST
+    if (event.httpMethod !== "POST") {
+        return { statusCode: 405, body: "Method Not Allowed" };
+    }
+
     try {
-        // 1. On récupère le message que l'utilisateur a tapé
         const body = JSON.parse(event.body);
         const userMessage = body.message;
+        const langCode = body.lang || 'en';
 
-        // 2. On récupère la clé secrète (que Netlify garde pour nous)
+        // 1. Traduction du code langue pour l'IA (Ex: 'fr' -> 'French')
+        const languageMap = {
+            'fr': 'French',
+            'en': 'English',
+            'es': 'Spanish',
+            'de': 'German'
+        };
+        const targetLanguage = languageMap[langCode] || 'English';
+
+        // 2. Vérification de la clé API
         const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            return { statusCode: 500, body: JSON.stringify({ error: "Clé API manquante" }) };
+        }
 
-        // 3. On initialise l'IA avec la clé
+        // 3. Initialisation de Gemini
         const genAI = new GoogleGenerativeAI(apiKey);
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
-        // 4. On envoie la question à Google et on attend la réponse
-        const result = await model.generateContent(userMessage);
+        // 4. Le "Cerveau" de Kai (System Prompt)
+        // 4. Le "Cerveau" de Kai (Version Anti-Hallucination)
+        const systemPrompt = `
+      You are Kai, the AI productivity coach for Hyperfocus.
+      
+      CORE RULES:
+      1. Be concise and precise. No fluff.
+      2. If you don't know the answer, say "I don't know" or "I'm not sure" (in the target language). DO NOT invent facts.
+      3. Focus only on productivity, organization, focus, and time management.
+      4. If asked about unrelated topics (politics, celebrities...), politely refuse.
+      
+      CRITICAL INSTRUCTION: You must respond in ${targetLanguage}.
+    `;
+
+
+        // 5. Envoi à Google
+        const fullPrompt = `${systemPrompt}\n\nUser: ${userMessage}\nKai (${targetLanguage}):`;
+
+        const result = await model.generateContent(fullPrompt);
         const response = await result.response;
         const text = response.text();
 
-        // 5. On renvoie la réponse à notre site web
         return {
             statusCode: 200,
             body: JSON.stringify({ reply: text }),
         };
+
     } catch (error) {
-        // En cas de pépin
-        return { statusCode: 500, body: JSON.stringify({ error: "Erreur IA" }) };
+        console.error("Erreur Backend:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: "Erreur technique Kai" }),
+        };
     }
 };
