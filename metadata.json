@@ -1,0 +1,8 @@
+{
+  "name": "HyperFocus ",
+  "description": "A high-performance, local-first productivity suite with integrated AI assistance for task management and visual analysis.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
