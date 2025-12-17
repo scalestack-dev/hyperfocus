@@ -1,20 +1,38 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Hyperfocus
 
-# Run and deploy your AI Studio app
+Master your flow. A dedicated productivity tool for entrepreneurs, freelancers, and creators, combining Deep Work principles with the Pomodoro technique.
 
-This contains everything you need to run your app locally.
+## What is Hyperfocus?
 
-View your app in AI Studio: https://ai.studio/apps/drive/159-pipWi0rouzlRdu-GVDlYBG3d57_aL
+Hyperfocus helps you structure your day, protect your focus time, and execute on what actually moves the needle.  
+It is designed for ambitious solo founders and small teams who want less chaos and more consistent output.
 
-## Run Locally
+## Core features (current & planned)
 
-**Prerequisites:**  Node.js
+- Focus sessions inspired by Pomodoro and Deep Work.
+- Simple task management with priorities.
+- Daily view so you always know what to work on next.
+- Support for routines and recurring tasks.
+- Multilingual experience (EN/FR) for international users.
 
+## Tech stack
 
-1. Install dependencies:
+- Frontend: React + TypeScript (Vite).
+- Styling: [compléter si tu utilises Tailwind/Chakra/etc.].
+- AI: Gemini API (via Google AI Studio / Antigravity for initial scaffolding).
+- Deployment: Netlify (via `netlify.toml`).
+
+## Run locally
+
+**Prerequisites:** Node.js and a Gemini API key.
+
+1. Install dependencies:  
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+2. Set the `GEMINI_API_KEY` in `.env.local` to your Gemini API key.
+3. Start the dev server:  
    `npm run dev`
+
+## Project status
+
+This repository started from a scaffold generated with Google AI Studio, but is now evolving into a production-ready SaaS product.
+The goal is to ship a focused productivity app for entrepreneurs and creators.
