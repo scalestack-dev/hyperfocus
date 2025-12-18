@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Loader2, Bot, User } from 'lucide-react';
 import { ChatMessage } from '../types';
 // Import du nouveau service API (assure-toi d'avoir créé le fichier dans src/services/)
-import { sendMessageToGemini } from '../services/geminiService';
+import { sendMessageToGemini } from '../services_temp/geminiService';
 // Ton import conservé tel quel :
 import { useLanguage } from '../contexts_temp/LanguageContext';
 

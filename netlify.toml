@@ -1,7 +1,7 @@
 [build]
-  # Commande de build standard pour Vite ou Create React App
+  # Commande de build standard pour Vite
   command = "npm run build"
-  # Dossier où les fichiers statiques sont générés (souvent 'dist' pour Vite, 'build' pour CRA)
+  # Dossier où les fichiers statiques sont générés
   publish = "dist" 
 
 [functions]
@@ -9,7 +9,7 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Redirection optionnelle pour simplifier l'URL en développement local si nécessaire
+# Redirection pour simplifier l'URL (utile en local et prod)
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
