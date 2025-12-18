@@ -1,19 +1,16 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 exports.handler = async function (event, context) {
-    // En-têtes pour autoriser l'accès depuis ton site (CORS)
     const headers = {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "Content-Type",
         "Access-Control-Allow-Methods": "POST, OPTIONS"
     };
 
-    // Gestion de la requête "preflight" (OPTIONS)
     if (event.httpMethod === "OPTIONS") {
         return { statusCode: 200, headers, body: "OK" };
     }
 
-    // On n'accepte que les requêtes POST
     if (event.httpMethod !== "POST") {
         return { statusCode: 405, headers, body: "Method Not Allowed" };
     }
@@ -31,23 +28,25 @@ exports.handler = async function (event, context) {
             };
         }
 
-        // Vérification de la clé API
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
+        // 1. RÉCUPÉRATION ET NETTOYAGE DE LA CLÉ
+        // On utilise .trim() pour supprimer les espaces accidentels au début ou à la fin
+        const rawApiKey = process.env.GEMINI_API_KEY;
+        if (!rawApiKey) {
             throw new Error("Variable GEMINI_API_KEY introuvable sur Netlify.");
         }
+        const apiKey = rawApiKey.trim();
 
-        // Initialisation de Google AI
+        // 2. INITIALISATION
         const genAI = new GoogleGenerativeAI(apiKey);
 
-        // CORRECTION MAJEURE : Utilisation de "gemini-pro" (stable)
-        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        // 3. CHOIX DU MODÈLE
+        // On retourne sur "gemini-1.5-flash" qui est le standard actuel.
+        // Si cela échoue encore avec 404, c'est que l'API n'est pas activée sur le compte Google Cloud.
+        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-        // Configuration de la langue
         const languageMap = { fr: "French", en: "English", es: "Spanish", de: "German" };
         const targetLanguage = languageMap[langCode] || "English";
 
-        // Démarrage du chat avec instructions
         const chat = model.startChat({
             history: [
                 {
@@ -61,7 +60,6 @@ exports.handler = async function (event, context) {
             ],
         });
 
-        // Envoi du message
         const result = await chat.sendMessage(userMessage);
         const response = await result.response;
         const text = response.text();
@@ -74,12 +72,18 @@ exports.handler = async function (event, context) {
 
     } catch (error) {
         console.error("ERREUR:", error);
+
+        // Message d'aide personnalisé selon l'erreur
+        let helpMsg = "";
+        if (error.message.includes("404") || error.message.includes("not found")) {
+            helpMsg = " (Vérifie que l'API 'Generative Language API' est bien activée dans ta console Google Cloud)";
+        }
+
         return {
             statusCode: 500,
             headers,
             body: JSON.stringify({
-                // Message d'erreur détaillé pour le débogage
-                error: `Erreur IA: ${error.message}`
+                error: `Erreur IA: ${error.message}${helpMsg}`
             }),
         };
     }
